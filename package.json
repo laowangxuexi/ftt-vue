@@ -1,0 +1,20 @@
+{
+  "name": "ftt-vue",
+  "version": "1.0.0",
+  "description": "make a frame just by hand",
+  "main": "index.js",
+  "scripts": {
+    "start": "rollup -c"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/laowangxuexi/ftt-vue.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/laowangxuexi/ftt-vue/issues"
+  },
+  "homepage": "https://github.com/laowangxuexi/ftt-vue#readme"
+}
