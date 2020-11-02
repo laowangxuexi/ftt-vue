@@ -4,7 +4,8 @@
   "description": "make a frame just by hand",
   "main": "index.js",
   "scripts": {
-    "start": "rollup -c"
+    "start": "rollup -c",
+    "git": "node ./lazy-util/git.js"
   },
   "repository": {
     "type": "git",
