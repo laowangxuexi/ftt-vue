@@ -10,10 +10,27 @@
 <body>
 
   <script>
-    let arr = [22, 33, 44]
-    let arr1 = arr.slice
-    arr1[0] = 99
-    console.log(arr.slice())
+    const bailRE = /[^\w.$]/
+    function parsePath(path) {
+      if (bailRE.test(path)) {
+        return
+      }
+      const segments = path.split('.')
+      return function (obj) {
+        for (let i = 0; i < segments.length; i++) {
+          if (!obj) return
+          obj = obj[segments[i]]
+        }
+        return obj
+      }
+    }
+    let obj = {
+      a: "aaaa"
+    }
+    let g = parsePath(() => {
+      console.log(123)
+    })
+    console.log(g)
   </script>
 
 </body>
