@@ -1,4 +1,5 @@
 import { def } from "../util/index"
+import Dep from "./dep"
 
 export class Observer {
   constructor(value) {
@@ -29,18 +30,20 @@ function defineReactive(obj, key, value) {
   if (typeof value == 'object') {
     new Observer(value)
   }
-  console.log('value', value)
+  const dep = new Dep()
   Object.defineProperty(obj, key, {
     enumerable: true,
     configurable: true,
     get() {
       console.log('-这里是getter-', value)
+      dep.depend(key)
       return value
     },
     set(newVal) {
       console.log('-这里是setter-newVal:', newVal)
       if (newVal === value) return
       value = newVal
+      dep.notify()
     }
   })
 }
