@@ -1,6 +1,6 @@
 
 // 每天提交想说的话
-let iSay = 'Watcher完成。(mark一下) 忘记在哪里 是怎么使用的了'
+let iSay = '状态不好 array响应式要重来一下'
 
 module.exports = {
   iSay

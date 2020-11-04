@@ -1,12 +1,15 @@
 import { def } from "../util/index"
+import { arrayMethods } from "./array"
 import Dep from "./dep"
 
 export class Observer {
   constructor(value) {
     this.value = value
+    this.dep = new Dep() // 数组的依赖手机
     // value.__ob__ = this
     def(value, '__ob__', this)
     if (Array.isArray(value)) {
+      protoAugment(value, arrayMethods)
 
     } else {
       this.walk(value)
@@ -22,7 +25,7 @@ export class Observer {
 }
 
 function defineReactive(obj, key, value) {
-
+  let childOb = observe(value)
   if (arguments.length === 2) {
     value = obj[key]
   }
@@ -37,6 +40,9 @@ function defineReactive(obj, key, value) {
     get() {
       console.log('-这里是getter-', value)
       dep.depend(key)
+      if(childOb) {
+        childOb.dep.depend(key) // 数组的依赖收集
+      }
       return value
     },
     set(newVal) {
@@ -46,4 +52,17 @@ function defineReactive(obj, key, value) {
       dep.notify()
     }
   })
+}
+
+function observe(value, asRootData) {
+  if (value.__ob__) {
+    return value.__ob__
+  } else {
+    return new Observer(value)
+  }
+
+}
+
+function protoAugment(value, target) {
+  value.__proto__ = target
 }

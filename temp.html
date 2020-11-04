@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="zn_CN">
 
 <head>
   <meta charset="UTF-8">
@@ -10,27 +10,13 @@
 <body>
 
   <script>
-    const bailRE = /[^\w.$]/
-    function parsePath(path) {
-      if (bailRE.test(path)) {
-        return
+    let obj = {a: 1}
+    Object.defineProperty(obj, 'abc', {
+      get() {
+        console.log(this)
       }
-      const segments = path.split('.')
-      return function (obj) {
-        for (let i = 0; i < segments.length; i++) {
-          if (!obj) return
-          obj = obj[segments[i]]
-        }
-        return obj
-      }
-    }
-    let obj = {
-      a: "aaaa"
-    }
-    let g = parsePath(() => {
-      console.log(123)
     })
-    console.log(g)
+    console.log(obj)
   </script>
 
 </body>

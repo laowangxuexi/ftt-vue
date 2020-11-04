@@ -13,6 +13,29 @@
     });
   }
 
+  const arrayProto = Array.prototype;
+
+  // 
+  const arrayMethods = Object.create(arrayProto);
+
+  const methodsToPatch = [
+    'push', 'pop', 'shift', 'unshift', 'splice', 'sort', 'reverse'
+  ];
+
+  methodsToPatch.forEach(method => {
+    let originalFunc = arrayMethods.method;
+    Object.defineProperty(arrayMethods, method, {
+      enumerable: false,
+      configurable: true,
+      writable: true,
+      value: function mutator(...args) {
+        const result = originalFunc.apply(this, args);
+        console.log('methodsToPatch', this);
+        return result
+      }
+    });
+  });
+
   class Dep {
     constructor() {
       this.subs = [];
@@ -55,9 +78,13 @@
   class Observer {
     constructor(value) {
       this.value = value;
+      this.dep = new Dep(); // 数组的依赖手机
       // value.__ob__ = this
       def(value, '__ob__', this);
-      if (Array.isArray(value)) ; else {
+      if (Array.isArray(value)) {
+        protoAugment(value, arrayMethods);
+
+      } else {
         this.walk(value);
       }
     }
@@ -71,7 +98,7 @@
   }
 
   function defineReactive(obj, key, value) {
-
+    let childOb = observe(value);
     if (arguments.length === 2) {
       value = obj[key];
     }
@@ -86,6 +113,9 @@
       get() {
         console.log('-这里是getter-', value);
         dep.depend(key);
+        if(childOb) {
+          childOb.dep.depend(key); // 数组的依赖收集
+        }
         return value
       },
       set(newVal) {
@@ -95,6 +125,20 @@
         dep.notify();
       }
     });
+  }
+
+  function observe(value, asRootData) {
+    if (value.__ob__) {
+      return __ob__
+    } else {
+      alert('一般来说跑不到这里');
+      return new Observer(value)
+    }
+
+  }
+
+  function protoAugment(value, target) {
+    value.__proto__ = target;
   }
 
   function initState(vm) {
