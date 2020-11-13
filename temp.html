@@ -9,24 +9,6 @@
 
 <body>
   <pre>
-    `id` int(11) NOT NULL AUTO_INCREMENT,
-  `order_id` int(11) DEFAULT NULL COMMENT '订单id',
-  `no` varchar(20) NOT NULL COMMENT '财务单据号',
-  `title` varchar(255) NOT NULL DEFAULT '' COMMENT '财务单据标题',
-  `create_time` varchar(13) NOT NULL COMMENT '创建时间',
-  `update_time` varchar(13) DEFAULT NULL COMMENT '更新时间',
-  `aid` int(11) NOT NULL COMMENT '创建人id',
-  `fee` decimal(10,2) NOT NULL DEFAULT '0.00' COMMENT '财务单据总金额',
-  `status` tinyint(1) NOT NULL DEFAULT '1' COMMENT '记录状态\r\n1，已提交\r\n2，已审核\r\n9，已完成\r\n0，已作废\r\n',
-  `type` tinyint(1) NOT NULL DEFAULT '0' COMMENT '记录类型 0,支出1，收入，2，其他（无资金流动）',
-  `area_id` int(11) NOT NULL COMMENT '地区id',
-  `company_id` int(11) NOT NULL COMMENT '所属公司id',
-  `memo` varchar(255) DEFAULT NULL COMMENT '备注',
-  `verify_flag` tinyint(1) DEFAULT NULL COMMENT '审核需求 标记 ：0,无需审核，1，需要审核',
-  `verify_aid` tinyint(1) DEFAULT NULL COMMENT '审核人员id',
-  `verify_time` varchar(13) DEFAULT NULL COMMENT '审核时间',
-  `f_cate_id` int(11) DEFAULT NULL COMMENT '财务分类id',
-  `fund_verify` tinyint(1) DEFAULT '0' COMMENT '资金审核标记（自动）',
   </pre>
   <script>
     function isObject(value) {
@@ -45,6 +27,45 @@
 
     let data = [
     ]
+
+    class VNode {
+      constructor(
+        tag,
+        data,
+        children,
+        text,
+        elm, // 真实dom节点
+        context, // 组件对应的vue实例
+        componentOptions, // 组件的options选项
+        asyncFactory, // 
+      ) {
+        this.tag = tag
+        this.data = data
+        this.children = children
+        this.text = text
+        this.elm = elm
+        this.context = context
+        this.componentOptions = componentOptions
+        this.asyncFactory = asyncFactory
+
+        this.ns = undefined // 命名空间
+        this.key = data && data.key // 遍历时的优化key
+        this.parent = null // 父节点
+        this.row = false // innerHTML为ture  textContent时候为false
+        this.isStatic = false // 静态节点
+        this.isRootInsert = true // 是否作为根节点插入
+        this.isComment = false // 注释节点
+        this.isClone = false // 克隆节点
+        this.isOnce = false // 是否有v-once指令
+      }
+      get child() {
+        return this.componentOptions
+      }
+
+    }
+    let test = new VNode()
+    test.componentOptions = { vue: 110 }
+    console.log(test.child)
   </script>
 
 </body>

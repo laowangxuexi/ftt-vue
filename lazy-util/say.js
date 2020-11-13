@@ -1,6 +1,6 @@
 
 // 每天提交想说的话
-let iSay = '响应式 暂时完毕'
+let iSay = 'VNode 开始了'
 
 module.exports = {
   iSay
