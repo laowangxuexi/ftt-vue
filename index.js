@@ -1,7 +1,7 @@
 (function (global, factory) {
   typeof exports === 'object' && typeof module !== 'undefined' ? module.exports = factory() :
   typeof define === 'function' && define.amd ? define(factory) :
-  (global = global || self, global.V = factory());
+  (global = typeof globalThis !== 'undefined' ? globalThis : global || self, global.V = factory());
 }(this, (function () { 'use strict';
 
   function def(obj, key, value) {
@@ -11,6 +11,10 @@
       writable: true,
       value: value
     });
+  }
+
+  function isObject(value) {
+    return typeof value == 'object' && value !== null
   }
 
   const arrayProto = Array.prototype;
@@ -23,14 +27,14 @@
   ];
 
   methodsToPatch.forEach(method => {
-    let originalFunc = arrayMethods.method;
+    let originalFunc = arrayMethods[method];
     Object.defineProperty(arrayMethods, method, {
       enumerable: false,
       configurable: true,
       writable: true,
       value: function mutator(...args) {
         const result = originalFunc.apply(this, args);
-        console.log('methodsToPatch', this);
+        console.log('这里执行数组的依赖更新', this);
         return result
       }
     });
@@ -66,7 +70,7 @@
     }
   }
 
-  function remove (arr, item) {
+  function remove(arr, item) {
     if (arr.length) {
       const index = arr.indexOf(item);
       if (index > -1) {
@@ -78,12 +82,11 @@
   class Observer {
     constructor(value) {
       this.value = value;
-      this.dep = new Dep(); // 数组的依赖手机
-      // value.__ob__ = this
+      this.dep = new Dep(); // 数组的依赖数组
       def(value, '__ob__', this);
       if (Array.isArray(value)) {
         protoAugment(value, arrayMethods);
-
+        this.observeArray(value);
       } else {
         this.walk(value);
       }
@@ -92,16 +95,24 @@
     walk(obj) {
       let keys = Object.keys(obj);
       keys.forEach((item, index) => {
-        defineReactive(obj, item, obj[item]);
+        defineReactive(obj, item);
       });
     }
+
+    observeArray(items) {
+      for (let i = 0; i < items.length; i++) {
+        observe(items[i]);
+      }
+    }
+
   }
 
   function defineReactive(obj, key, value) {
-    let childOb = observe(value);
+
     if (arguments.length === 2) {
       value = obj[key];
     }
+    let childOb = observe(value);
 
     if (typeof value == 'object') {
       new Observer(value);
@@ -113,7 +124,8 @@
       get() {
         console.log('-这里是getter-', value);
         dep.depend(key);
-        if(childOb) {
+        if (childOb) {
+          console.log('这里说明有childOb', '执行了depend()方法');
           childOb.dep.depend(key); // 数组的依赖收集
         }
         return value
@@ -128,13 +140,12 @@
   }
 
   function observe(value, asRootData) {
+    if (!isObject(value)) return
     if (value.__ob__) {
-      return __ob__
+      return value.__ob__
     } else {
-      alert('一般来说跑不到这里');
       return new Observer(value)
     }
-
   }
 
   function protoAugment(value, target) {

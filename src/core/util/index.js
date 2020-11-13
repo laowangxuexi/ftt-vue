@@ -6,3 +6,7 @@ export function def(obj, key, value) {
     value: value
   })
 }
+
+export function isObject(value) {
+  return typeof value == 'object' && value !== null
+}
