@@ -10,3 +10,7 @@ export function def(obj, key, value) {
 export function isObject(value) {
   return typeof value == 'object' && value !== null
 }
+
+export function isDef(value) {
+  return value !== null && value !== undefined
+}
