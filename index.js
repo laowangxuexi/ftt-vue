@@ -292,7 +292,7 @@
       function compiler(template, options) {
         //...
 
-        const finalOptions = Object.create(options);
+        const finalOptions = Object.create(options); // ***** 临时这样写的 *****
 
         const compiled = baseCompiler(template.trim(), finalOptions);
         //...
@@ -306,11 +306,28 @@
     }
   }
 
+  function parseHTML(template, options) {
+    console.log('parseHTML  template:', template);
+    options.test();
+  }
+
+  function parse(template, options) {
+    // ... 其他代码
+    let root;
+    parseHTML(template, {
+      //...
+      test() {
+        console.log('test test test 钩子函数');
+      }
+    });
+    root = 'root ast ast ast ast';
+    return root
+  }
+
   const createCompiler = createCompilerCreator(function baseCompiler(template, options) {
     // ...
     // 模板解析阶段 生成ast
-    // const ast = parse(template.trim(), options)
-    const ast = "parse ast";
+    const ast = parse(template.trim());
 
     // 优化阶段 遍历ast 为静态节点打上标记
     // 将ast生成render函数
