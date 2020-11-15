@@ -18,3 +18,11 @@ export function createTextNode(text) {
 export function createComment(text) {
   return document.createComment(text)
 }
+
+export function parentNode(node) {
+  return node.parentNode
+}
+
+export function removeChild(node, child) {
+  node.removeChild(child)
+}

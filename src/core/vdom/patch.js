@@ -1,5 +1,5 @@
 import { isDef, isTrue, isPrimitive } from "../util/index"
-import { createElement, appendChild, createTextNode, createComment } from "../../platforms/web/runtime/node-ops"
+import { createElement, appendChild, createTextNode, createComment, parentNode, removeChild } from "../../platforms/web/runtime/node-ops"
 
 export function createElm(vnode, insertVnodeQueue, parentElm, refElm) {
   const data = vnode.data
@@ -40,4 +40,14 @@ function insert(parent, elm, ref) {
 
   //   }
   // }
+}
+
+function removeChild(el) {
+  let parent = el.parentNode()
+  if (isDef(parent)) {
+    removeChild(parent, el)
+  }
+}
+
+function patchVnode() {
 }
