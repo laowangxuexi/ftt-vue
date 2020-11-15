@@ -6,6 +6,7 @@ import { initMixin } from './init'
  */
 import { VNode } from "../vdom/vnode"
 import { createElm } from "../vdom/patch"
+import { createCompiler } from "../../compiler/index"
 
 
 function V(options) {
@@ -13,6 +14,7 @@ function V(options) {
 }
 V.prototype.VNode = VNode
 V.prototype.createElm = createElm
+V.prototype.createCompiler = createCompiler
 
 initMixin(V)
 

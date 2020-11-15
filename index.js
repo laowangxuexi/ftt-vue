@@ -246,7 +246,6 @@
   }
 
   function createElm(vnode, insertVnodeQueue, parentElm, refElm) {
-    
     const data = vnode.data;
     const children = vnode.children;
     const tag = vnode.tag;
@@ -287,11 +286,46 @@
     // }
   }
 
+  function createCompilerCreator(baseCompiler) {
+    return function createCompiler(baseOptions) {
+      // ...
+      function compiler(template, options) {
+        //...
+
+        const finalOptions = Object.create(options);
+
+        const compiled = baseCompiler(template.trim(), finalOptions);
+        //...
+        return compiled
+      }
+
+      return {
+        compiler,
+        compilerToFunctions: { test: '待开发...' }
+      }
+    }
+  }
+
+  const createCompiler = createCompilerCreator(function baseCompiler(template, options) {
+    // ...
+    // 模板解析阶段 生成ast
+    // const ast = parse(template.trim(), options)
+    const ast = "parse ast";
+
+    // 优化阶段 遍历ast 为静态节点打上标记
+    // 将ast生成render函数
+
+    return {
+      ast
+    }
+  });
+
   function V(options) {
     this._init(options);
   }
   V.prototype.VNode = VNode;
   V.prototype.createElm = createElm;
+  V.prototype.createCompiler = createCompiler;
 
   initMixin(V);
 

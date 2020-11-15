@@ -1,6 +1,6 @@
 
 // 每天提交想说的话
-let iSay = 'diff算法部分以后集中处理,先了解patch整体流程先弄出来'
+let iSay = '模板编译部分 几个函数支架架起来了  继续加油继续加油!!!'
 
 module.exports = {
   iSay

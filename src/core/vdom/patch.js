@@ -42,7 +42,7 @@ function insert(parent, elm, ref) {
   // }
 }
 
-function removeChild(el) {
+function removeNode(el) {
   let parent = el.parentNode()
   if (isDef(parent)) {
     removeChild(parent, el)
