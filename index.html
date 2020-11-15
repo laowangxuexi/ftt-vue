@@ -13,12 +13,14 @@
   <script>
     let app = new V({
       data: {
-        num: 1,
-        arr: [11, 22, 33, { aa: 123 }],
-        obj: { adf: 12 }
       }
     })
-    console.log(app)
+
+    let vn = new app.VNode(undefined, {}, [], '老王牛逼')
+    const body = document.body
+
+    console.log(vn)
+    app.createElm(vn, [], body)
   </script>
 </body>
 

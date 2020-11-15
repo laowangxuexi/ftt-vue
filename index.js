@@ -1,7 +1,7 @@
 (function (global, factory) {
   typeof exports === 'object' && typeof module !== 'undefined' ? module.exports = factory() :
   typeof define === 'function' && define.amd ? define(factory) :
-  (global = typeof globalThis !== 'undefined' ? globalThis : global || self, global.V = factory());
+  (global = global || self, global.V = factory());
 }(this, (function () { 'use strict';
 
   function def(obj, key, value) {
@@ -15,6 +15,20 @@
 
   function isObject(value) {
     return typeof value == 'object' && value !== null
+  }
+
+  function isDef(value) {
+    return value !== null && value !== undefined
+  }
+
+  function isTrue(value) {
+    return value === true
+  }
+
+  function isPrimitive(value) {
+    return (
+      typeof value === 'string' || value === 'number' || value === 'boolean' || value === 'symbol'
+    )
   }
 
   const arrayProto = Array.prototype;
@@ -175,9 +189,109 @@
     };
   }
 
+  class VNode {
+    constructor(
+      tag,
+      data,
+      children,
+      text,
+      elm, // 真实dom节点
+      context, // 组件对应的vue实例
+      componentOptions, // 组件的options选项
+      asyncFactory, // 
+    ) {
+      this.tag = tag;
+      this.data = data;
+      this.children = children;
+      this.text = text;
+      this.elm = elm;
+      this.context = context;
+      this.componentOptions = componentOptions;
+      this.asyncFactory = asyncFactory;
+
+      this.ns = undefined; // 命名空间
+      this.key = data && data.key; // 遍历时的优化key
+      this.parent = null; // 父节点
+      this.row = false; // innerHTML为ture  textContent时候为false
+      this.isStatic = false; // 静态节点
+      this.isRootInsert = true; // 是否作为根节点插入
+      this.isComment = false; // 注释节点
+      this.isClone = false; // 克隆节点
+      this.isOnce = false; // 是否有v-once指令
+    }
+    get child() {
+      return this.componentOptions
+    }
+
+  }
+
+  function createElement(tagName, vnode) {
+    const elm = document.createElement(tagName);
+    return elm
+    // if (tagName !== 'select') {
+    //   return elm
+    // }
+  }
+
+  function appendChild(node, child) {
+    node.appendChild(child);
+  }
+
+  function createTextNode(text) {
+    return document.createTextNode(text)
+  }
+
+  function createComment(text) {
+    return document.createComment(text)
+  }
+
+  function createElm(vnode, insertVnodeQueue, parentElm, refElm) {
+    
+    const data = vnode.data;
+    const children = vnode.children;
+    const tag = vnode.tag;
+    if (isDef(tag)) {
+      // 元素节点
+      vnode.elm = createElement(tag);
+      createChildren(vnode, children, insertVnodeQueue);
+      insert(parentElm, vnode.elm);
+    } else if (isTrue(vnode.isComment)) {
+      // 注释节点
+      vnode.elm = createComment(vnode.text);
+      insert(parentElm, vnode.elm);
+    } else {
+      // 文本节点
+      vnode.elm = createTextNode(String(vnode.text));
+      insert(parentElm, vnode.elm);
+    }
+  }
+
+  function createChildren(vnode, children, insertVnodeQueue) {
+    if (Array.isArray(children)) {
+      for (let i = 0; i < children.length; ++i) {
+        createEle(children[i], insertVnodeQueue, vnode.elm);
+      }
+    } else if (isPrimitive(vnode.text)) {
+      appendChild(vnode.elm, createTextNode(String(vnode.text)));
+    }
+  }
+
+  function insert(parent, elm, ref) {
+    appendChild(parent, elm);
+    // if (isDef(parent)) {
+    //   if(ifDef(ref)) {
+
+    //   } else {
+
+    //   }
+    // }
+  }
+
   function V(options) {
     this._init(options);
   }
+  V.prototype.VNode = VNode;
+  V.prototype.createElm = createElm;
 
   initMixin(V);
 

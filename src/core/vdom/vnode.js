@@ -1,5 +1,5 @@
 
-export default class VNode {
+export class VNode {
   constructor(
     tag,
     data,

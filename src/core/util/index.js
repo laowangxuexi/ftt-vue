@@ -14,3 +14,17 @@ export function isObject(value) {
 export function isDef(value) {
   return value !== null && value !== undefined
 }
+
+export function isTrue(value) {
+  return value === true
+}
+
+export function isFalse(value) {
+  return value === false
+}
+
+export function isPrimitive(value) {
+  return (
+    typeof value === 'string' || value === 'number' || value === 'boolean' || value === 'symbol'
+  )
+}
