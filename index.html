@@ -8,6 +8,7 @@
 </head>
 
 <body>
+  <div id="test"><!-- dff --><div>2132</div></div>
 
   <script src='index.js'></script>
   <script>
@@ -19,13 +20,11 @@
     let vn = new app.VNode(undefined, {}, [], '老王牛逼')
     const body = document.body
 
-    console.log(vn)
-    app.createElm(vn, [], body)
-
-
     let compiler = app.createCompiler()
-    console.log(compiler.compiler('sdf', {}))
+    console.log(compiler.compiler('<div>adfawefadf1231</div>', {}))
 
+    let test = document.getElementById('test')
+    console.log(test.innerHTML)
   </script>
 </body>
 
