@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+</head>
+
+<body>
+  <div id="test">
+    <!-- 123test -->
+  </div>
+  <script>
+    const comment = /<!\--/
+    let root
+    let targetAst = []
+    function parseHTML(html, options) {
+      let index = 0
+      while (html) {
+        if (comment.test(html)) {
+          let commentEnd = html.indexOf('-->')
+          if (commentEnd >= 0) {
+            options.comment(html.substring(4, commentEnd))
+          }
+          advance(commentEnd + 3)
+          continue
+        }
+      }
+
+      function advance(n) {
+        index += n
+        html = html.substring(n)
+      }
+    }
+    let t = document.getElementById('test')
+    let htmlStr = t.innerHTML.trim()
+    parseHTML(htmlStr, {
+      comment(text) {
+        const child = {
+          type: 3,
+          text,
+          isComment: true
+        }
+        targetAst.push(child)
+      }
+    })
+
+    console.log(targetAst)
+
+  </script>
+</body>
+
+</html>
