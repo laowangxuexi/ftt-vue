@@ -1,6 +1,6 @@
 
 // 每天提交想说的话
-let iSay = 'parseHTML 注释节点ast生成'
+let iSay = '正则啊  卡在了正则这里'
 
 module.exports = {
   iSay
